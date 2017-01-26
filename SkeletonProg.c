@@ -78,7 +78,7 @@ int var_ass(char *E, int V[3], int edges[no_edges][2]){
         case '1' : node1 = 1; break;
         case '2' : node1 = 2; break;//i.e. the variable has been assigned a number
     }
-    //printf("node 1 if of has a value of: %i\n",node1);
+ 
     switch(E[1]){
         case 'x' : node2 = V[0]; break;
         case 'y' : node2 = V[1]; break;
