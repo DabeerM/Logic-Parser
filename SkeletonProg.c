@@ -1,7 +1,6 @@
 #include <stdio.h> 
-#include <string.h>   /* for all the new-fangled string functions  *facepalm* */
-#include <stdlib.h>   /* malloc, free, rand */
-
+#include <string.h>   
+#include <stdlib.h>  
 
 const int Fsize=50;
 int no_edges;
@@ -61,7 +60,7 @@ int parse(char *g) //Checks if formula is valid recursively by
 	} 
 	return 0;
 	//Check which type of formula it is by checking the first character. If it starts w/: '(' it's binary connective, 'E' Existential, 'A' Universal, '-' Negative & 'X' Atomic
-	//See if it's a valid formula recursively. i.e. The formula isn't the mudda-booshit.
+	//See if it's a valid formula recursively
 	/* return 1 if atomic, 2 if  neg, 3 if binary, 4 if exists, 5 if for all, ow 0*/
 }
 
@@ -69,7 +68,7 @@ int parse(char *g) //Checks if formula is valid recursively by
 int var_ass(char *E, int V[3], int edges[no_edges][2]){
     int i;
     int node1,node2;
-    //printf("V[3] has a value of: %i\n",V[3]);
+
     // Assign nodes respective values
     switch(E[0]){
         case 'x' : node1 = V[0]; break;
@@ -84,20 +83,17 @@ int var_ass(char *E, int V[3], int edges[no_edges][2]){
         case 'x' : node2 = V[0]; break;
         case 'y' : node2 = V[1]; break;
         case 'z' : node2 = V[2]; break;
-        case '0' : node2 = 0;   printf("%c %i\n",E[1],0); break; //i.e. the variable has been assigned a number via existential or universal
+        case '0' : node2 = 0;    break; //i.e. the variable has been assigned a number via existential or universal
         case '1' : node2 = 1;    break;
         case '2' : node2 = 2;    break;
     }
-    //printf("node 2 if of has a value of: %i\n",node2);
-    //printf("Edge 1: %i %i",edges[0][0],edges[0][1]);
+	
     for( i = 0; i < no_edges; i++){
-		//printf("%i\n",i);
-		//printf("%i\n",edges[i][1]);
         if (node1 == edges[i][0]){
             if(node2 == edges[i][1]){
                 return 1;
-			}
-		}
+	    }
+	}
     }
     return 0;
 }
@@ -108,11 +104,11 @@ int atomic(char*nm,int edges[no_edges][2],int V[3]){ //Evaluates any atomic form
 	X[0] = nm[2];
 	X[1] = nm[3];
 	X[2] = '\0';
-	return var_ass(X, V, edges); //Hehe ;) "Vary" nice "ass"
+	return var_ass(X, V, edges); 
 }
 
-int negated(char*nm,int edges[no_edges][2],int V[3]){ //Tested works
-	return (eval(nm+1,edges,no_edges,V)==0);
+int negated(char*nm,int edges[no_edges][2],int V[3]){ 
+	return (eval(nm+1,edges,no_edges,V)==0); //This is equivalent to inverting a statement
 }
 
 int bin_pos(char*str){
@@ -147,7 +143,7 @@ char* second_half(char*form){
 	return new_str2;
 }
 
-int bin_con(char*nm,int edges[no_edges][2],int V[3]){ //Tested and it works
+int bin_con(char*nm,int edges[no_edges][2],int V[3]){ 
 	int binary_connective = bin_pos(nm);
 	int part1=eval(first_half(nm),edges,no_edges,V);
 	printf("First part:%i  ",part1);
@@ -178,24 +174,20 @@ char* replace_all(char char_to_replace,char*nm,int value){ //Replaces all charac
 	char * new_str = (char*)malloc(sizeof(new_form));
 	for (int i = 0; i < strlen(nm); i++){
 		if (nm[i]==char_to_replace){
-			new_str[i]=value; //might have to use (char)
+			new_str[i]=value; 
 		}
 		else{
 			new_str[i]=nm[i];
 		}
 	}
-	//printf("%s\n",new_str);
 	return new_str;
 }
 
 int existential(char*some_form,int edges[no_edges][2],int V[3]){
 	
 	int first  = eval(replace_all(some_form[1],some_form+2,'0'),edges,no_edges,V);
-	//printf("The first evalution (i.e. 0) is: %i\n",first);
 	int second = eval(replace_all(some_form[1],some_form+2,'1'),edges,no_edges,V);
-	//printf("The second evalution (i.e. 0) is: %i\n",second);
 	int third  = eval(replace_all(some_form[1],some_form+2,'2'),edges,no_edges,V);
-	//printf("The third  evalution (i.e. 0) is: %i\n",third);
 	if (first==1||second==1||third==1){
 		return 1;
 	}
@@ -205,23 +197,17 @@ int existential(char*some_form,int edges[no_edges][2],int V[3]){
 int universal(char*some_form,int edges[no_edges][2],int V[3]){
 	
 	int first  = eval(replace_all(some_form[1],some_form+2,'0'),edges,no_edges,V);
-	//printf("The first evalution (i.e. 0) is: %i\n",first);
 	int second = eval(replace_all(some_form[1],some_form+2,'1'),edges,no_edges,V);
-	//printf("The second evalution (i.e. 0) is: %i\n",second);
 	int third  = eval(replace_all(some_form[1],some_form+2,'2'),edges,no_edges,V);
-	///printf("The third  evalution (i.e. 0) is: %i\n",third);
 	if (first==1&&second==1&&third==1){
 		return 1;
 	}
 	return 0;
 }
 
-//The change I've made here is getting rid of parse2(nm) and the corresoponding numbers
 int eval(char *nm, int edges[no_edges][2], int size, int V[3])
 {
-	// printf("This formula is of type: %i\n",parse2(nm));
-	//printf("Edge[0][0]: %i\n",edges[0][0]);
-	switch(nm[0]){ //Don't care about formula validation as it is 
+	switch(nm[0]){ //Don't care about formula validation as it has already been verified by 'parse'
 		case 'X':return atomic(nm,edges,V);
 		case '-':return negated(nm,edges,V);
 		case '(':return bin_con(nm,edges,V);
