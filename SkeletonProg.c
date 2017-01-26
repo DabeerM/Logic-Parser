@@ -146,17 +146,16 @@ char* second_half(char*form){
 int bin_con(char*nm,int edges[no_edges][2],int V[3]){ 
 	int binary_connective = bin_pos(nm);
 	int part1=eval(first_half(nm),edges,no_edges,V);
-	printf("First part:%i  ",part1);
 	int part2=eval(second_half(nm),edges,no_edges,V);
-	printf("Second part:%i\n",part2);
+	
 	switch (nm[binary_connective]){
-		 case 'v' : if(part1 == 1 || part2 == 1){
+		case 'v' : if(part1 == 1 || part2 == 1){
                         return 1;
                     } break;
-        case '^' : if(part1 == 1 && part2 == 1){
+        	case '^' : if(part1 == 1 && part2 == 1){
                         return 1;
                     } break;
-        case '>' :  if(part1 == 1 && part2 == 1){
+       		case '>' :  if(part1 == 1 && part2 == 1){
                         return 1;
                     }
                     else if(part1 == 0){
