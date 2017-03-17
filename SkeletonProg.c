@@ -26,7 +26,7 @@ int bin_con_pos(char * g){ //Gets the position of the binary connective
 
 int parse(char *g) //Checks if formula is valid recursively by 
 {
-	if ((g[0]=='X')&&(g[1]=='[')&&(g[2]=='x'||g[2]=='y'||g[2]=='z')&&(g[3]=='x'||g[3]=='y'||g[3]=='z')&&(g[4]==']')){return 1;} //i.e. atomic formula
+	if ((g[0]=='X')&&(g[1]=='[')&&(g[2]=='x'||g[2]=='y'||g[2]=='z')&&(g[3]=='x'||g[3]=='y'||g[3]=='z')&&(g[4]==']')&&(strlen(g)==5)){return 1;} //i.e. atomic formula
 	else if ((g[0]=='-')&&(parse(g+1)>0)){return 2;} //i.e. negative
 	else if ((g[0]=='(')&&(g[strlen(g)-1]==')')){ //i.e. binary connective
 		int bin_con = bin_con_pos(g); 
